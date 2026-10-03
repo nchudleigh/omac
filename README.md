@@ -21,10 +21,6 @@
   <a href="#how-it-works">How it works</a>
 </p>
 
-<p align="center">
-  <img src="docs/images/keys.svg" alt="A keyboard with the letters that do something with Command lit green, and T and L dashed because their Omarchy bindings moved to Ctrl+Alt">
-</p>
-
 Omarchy already gives you ⌘C, ⌘V and ⌘X. This adds the rest of what a Mac
 user's hands reach for without thinking: select all, undo and redo, new tab, the
 address bar, a ⌘W that closes the tab rather than the window, and a ⌘V that
