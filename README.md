@@ -91,24 +91,30 @@ keyboard it is the Windows key, unless you [move it](#putting--next-to-space).
 | ⌘R | Reload |
 | ⌘D | Duplicate, or bookmark in a browser |
 | ⌘E | Search or edit, depending on the app |
+| ⌘← / ⌘→ | Line start / line end |
+| ⌘↑ / ⌘↓ | Document start / document end |
+| ⇧⌘ + arrow | Select to the same place |
 | ⌘W | Close tab, then the window |
 | ⌘Q | Close window |
 | ⌘V | Paste, images included |
 | ⌘K | Keybindings, in Mac menu symbols |
 
-Two of these letters held Omarchy window bindings, which move one modifier along
-rather than disappearing:
+Some of these keys held Omarchy window bindings, which move to Ctrl+Alt rather
+than disappearing:
 
 | Omarchy action | Was | Now |
 |---|---|---|
 | Toggle floating/tiling | Super+T | Ctrl+Alt+T |
 | Toggle workspace layout | Super+L | Ctrl+Alt+L |
+| Focus window by direction | Super+arrows | Ctrl+Alt+arrows |
+| Swap window by direction | Super+Shift+arrows | Ctrl+Alt+Shift+arrows |
 
 ### In terminals
 
 The ⌘-letter keys do nothing in a terminal. Ctrl+Z suspends a job, Ctrl+D closes
 the shell and Ctrl+A moves to the start of the line, so sending them would be
-worse than doing nothing. "Terminal" means Omarchy's own `terminal` window tag,
+worse than doing nothing. ⌘← and ⌘→ still work there, as Home and End, which
+shells and Claude Code read as line start and end. "Terminal" means Omarchy's own `terminal` window tag,
 the same one its clipboard bindings use.
 
 ⌘W closes the terminal window, because Ctrl+W there deletes a word. ⌘V pastes

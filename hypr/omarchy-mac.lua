@@ -76,6 +76,41 @@ hl.unbind("SUPER + L")
 o.bind("CTRL + ALT + L", "Toggle workspace layout", "omarchy-hyprland-workspace-layout-toggle")
 o.bind("SUPER + L", "Address bar", forward("CTRL", "L"))
 
+-- ---------------------------------------------------------------- ⌘ + arrow
+--
+-- Caret moves as on a Mac: line start and end, document top and bottom, and
+-- with ⇧ the same moves select. In a terminal only ⌘← and ⌘→ apply, as Home
+-- and End, which shells and Claude Code read as line start and end.
+local function caret(mods, key, in_terminal)
+  return function()
+    if active_window_is_terminal() and not in_terminal then
+      return
+    end
+    send_once(mods, key)
+  end
+end
+
+local arrows = {
+  { key = "LEFT", dir = "l", to = "Home", where = "left", swap = "to the left" },
+  { key = "RIGHT", dir = "r", to = "End", where = "right", swap = "to the right" },
+  { key = "UP", dir = "u", to = "Home", ctrl = true, where = "above", swap = "up" },
+  { key = "DOWN", dir = "d", to = "End", ctrl = true, where = "below", swap = "down" },
+}
+
+for _, a in ipairs(arrows) do
+  -- Omarchy's window focus and swap move to CTRL + ALT, as ⌘T and ⌘L do.
+  hl.unbind("SUPER + " .. a.key)
+  hl.unbind("SUPER + SHIFT + " .. a.key)
+  o.bind("CTRL + ALT + " .. a.key, "Focus on " .. a.where .. " window", hl.dsp.focus({ direction = a.dir }))
+  o.bind("CTRL + ALT + SHIFT + " .. a.key, "Swap window " .. a.swap, hl.dsp.window.swap({ direction = a.dir }))
+
+  local mods = a.ctrl and "CTRL" or ""
+  local label = a.ctrl and (a.key == "UP" and "Document start" or "Document end")
+    or (a.key == "LEFT" and "Line start" or "Line end")
+  o.bind("SUPER + " .. a.key, label, caret(mods, a.to, not a.ctrl))
+  o.bind("SUPER + SHIFT + " .. a.key, "Select to " .. label:lower(), caret(mods == "" and "SHIFT" or "CTRL SHIFT", a.to, false))
+end
+
 -- ---------------------------------------------------------------------- ⌘W
 --
 -- Close the tab, or the window when no tab closed. Terminals use Ctrl+W to
