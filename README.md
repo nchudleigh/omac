@@ -154,6 +154,8 @@ and is wrong for an Apple one.
 | Three fingers sideways | Move between workspaces, following your fingers. A quick flick switches; a slow drag peeks and snaps back unless it passes halfway |
 | Four fingers pinched in | Launchpad |
 
+When you let go, the workspace slides the rest of the way with an ease-out cubic in 180 ms. Omarchy ships workspace animations off, so this also animates Super+1–9.
+
 Two fingers can never be a gesture here. libinput reads two fingers as scrolling
 and only three or more as a swipe, so nothing in Hyprland ever sees a two-finger
 swipe.

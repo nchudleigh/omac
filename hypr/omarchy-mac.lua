@@ -175,6 +175,12 @@ hl.config({
   },
 })
 
+-- Omarchy turns workspace animations off, so a released swipe jumps the rest
+-- of the way. Slide it home instead, ease-out cubic, in 180 ms (speed is in
+-- tenths of a second). This also animates Super+1..9 switches.
+hl.curve("easeOutCubic", { type = "bezier", points = { { 0.33, 1 }, { 0.68, 1 } } })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 1.8, bezier = "easeOutCubic", style = "slide" })
+
 -- Four fingers pinched in opens Launchpad, as on a Mac.
 hl.gesture({ fingers = 4, direction = "pinchin", action = function()
   hl.exec_cmd("omarchy-shell -q local.mac-launchpad toggle")
