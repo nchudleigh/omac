@@ -1,141 +1,111 @@
 #!/bin/bash
-# From Macifier (github.com/omeganter/macifier), commit cf9c0cd, under its
-# MIT licence:
+# Omarchy's keybindings menu, with shortcuts written the way macOS menus write
+# them: ⇧⌘↩ rather than SUPER SHIFT + RETURN.
 #
-#   Copyright (c) 2026 Alvaro Antolinez
+#   mac-keybindings           open the menu and run the binding you pick
+#   mac-keybindings --print   print the list
 #
-#   Permission is hereby granted, free of charge, to any person obtaining a copy
-#   of this software and associated documentation files (the "Software"), to
-#   deal in the Software without restriction, including without limitation the
-#   rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-#   sell copies of the Software, and to permit persons to whom the Software is
-#   furnished to do so, subject to the following conditions:
-#
-#   The above copyright notice and this permission notice shall be included in
-#   all copies or substantial portions of the Software.
-#
-#   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-#   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-#   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-#   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-#   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-#   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-#   IN THE SOFTWARE.
-#
-# Omarchy's keybindings screen, in Mac key names.
-#
-#   mac-keybindings            the menu (what ⌘K opens while keynames is on)
-#   mac-keybindings --print    the list, for a terminal or a grep
-#
-# Omarchy's screen spells every shortcut the way Hyprland stores it:
-# "SUPER SHIFT + RETURN". A Mac user looks for Shift-Command-Return and finds a vocabulary
-# they have to translate on the way to the key. This shows the same list,
-# worded the way a Mac menu would word it.
-#
-# Only the wording is ours. The bindings, their order, the cache and what
-# running one does all come from omarchy-menu-keybindings itself: its functions
-# are loaded here and everything above the menu is left to them, so a binding
-# Omarchy adds next week shows up here without anyone touching this file. What
-# gets rewritten is the left-hand column and nothing else.
-#
-# If Omarchy's script ever changes shape and its functions cannot be loaded,
-# this hands over to it untranslated. The wrong key names are a much smaller
-# problem than no keybindings screen at all.
+# Collecting, caching and running bindings stay Omarchy's job. This loads the
+# function definitions from omarchy-menu-keybindings, which sit above its menu
+# code, and rewrites only the shortcut in front of each arrow.
 
 set -o pipefail
 
-OMARCHY_KEYBINDINGS="$(command -v omarchy-menu-keybindings || true)"
+omarchy_menu=$(command -v omarchy-menu-keybindings) || {
+  echo "mac-keybindings: omarchy-menu-keybindings not found" >&2
+  exit 1
+}
 
-upstream() { exec omarchy-menu-keybindings "$@"; }
+# Everything above its last top-level `if`, the menu itself, is function
+# definitions. If that ever stops holding, open Omarchy's own menu rather than
+# none.
+definitions=$(awk '/^if / { last = NR } { line[NR] = $0 } END { for (i = 1; i < last; i++) print line[i] }' "$omarchy_menu")
+eval "$definitions"
+if ! declare -F output_binding_records dispatch_binding >/dev/null; then
+  exec omarchy-menu-keybindings "$@"
+fi
 
-[[ -n $OMARCHY_KEYBINDINGS ]] || { echo "omarchy-menu-keybindings not found" >&2; exit 1; }
-
-# Everything before its entry point is function definitions. Loading that part
-# gives us the functions without running its menu.
-functions_src="$(sed '/^if \[\[ \$1 == "--print"/,$d' "$OMARCHY_KEYBINDINGS")"
-[[ -n $functions_src && $functions_src != "$(cat "$OMARCHY_KEYBINDINGS")" ]] || upstream "$@"
-eval "$functions_src"
-for fn in output_binding_records dispatch_binding; do
-  declare -F "$fn" >/dev/null || upstream "$@"
-done
-
-# Records are "display<TAB>dispatcher<TAB>arg", display being
-# "SUPER SHIFT + B                     → Browser". Rewrite the combination in
-# the display field and pass the rest through untouched.
-#
-# Written the way Apple's own support pages write shortcuts: words, joined by
-# hyphens, modifiers in the order macOS prints them — Control, Option, Shift,
-# Command. So "Shift-Command-B", never "Command+Shift+B". Words rather than
-# ⌃⌥⇧⌘ because the symbols are one more thing to learn, and the point of this
-# screen is to be read at a glance. SUPER is Command because that is the key
-# Apple's keyboards send it from; ALT is Option for the same reason.
-macify() {
-  LC_ALL=C.UTF-8 gawk -F '\t' -v OFS='\t' '
+# Records are "SHORTCUT → Action<TAB>dispatcher<TAB>arg". Modifiers print in
+# the order macOS menus use, ⌃⌥⇧⌘, then the key as its glyph or name.
+to_mac_glyphs() {
+  gawk -F '\t' -v OFS='\t' '
     BEGIN {
-      n = split("CTRL:1 CONTROL:1 ALT:2 SHIFT:3 SUPER:4", pairs, " ")
-      for (i = 1; i <= n; i++) { split(pairs[i], kv, ":"); rank[kv[1]] = kv[2] }
-      word[1] = "Control"; word[2] = "Option"; word[3] = "Shift"; word[4] = "Command"
+      glyph["CTRL"] = "⌃"; glyph["CONTROL"] = "⌃"; glyph["ALT"] = "⌥"
+      glyph["SHIFT"] = "⇧"; glyph["SUPER"] = "⌘"
+      order = "⌃⌥⇧⌘"
 
-      # Keys with a Mac name. Anything not here keeps its own name, which for
-      # letters, digits and F-keys is already right. Backspace is "Delete" on
-      # a Mac keyboard, and Delete is "Forward Delete".
-      n = split("RETURN=Return|ENTER=Return|KP_ENTER=Enter|TAB=Tab|SPACE=Space|ESCAPE=Escape|ESC=Escape" \
-                "|BACKSPACE=Delete|DELETE=Forward Delete" \
-                "|LEFT=Left Arrow|RIGHT=Right Arrow|UP=Up Arrow|DOWN=Down Arrow|HOME=Home|END=End" \
-                "|PRIOR=Page Up|PAGE_UP=Page Up|NEXT=Page Down|PAGE_DOWN=Page Down" \
-                "|COMMA=Comma|PERIOD=Period|MINUS=Minus|EQUAL=Equals|SLASH=Slash|BACKSLASH=Backslash" \
-                "|SEMICOLON=Semicolon|APOSTROPHE=Quote|GRAVE=Grave Accent|BRACKETLEFT=Left Bracket" \
-                "|BRACKETRIGHT=Right Bracket|PRINT=Print Screen|CAPS_LOCK=Caps Lock" \
-                "|LEFT MOUSE BUTTON=Click|RIGHT MOUSE BUTTON=Right Click|MIDDLE MOUSE BUTTON=Middle Click" \
-                "|MOUSE_DOWN=Scroll Down|MOUSE_UP=Scroll Up" \
-                "|XF86AUDIORAISEVOLUME=Volume Up|XF86AUDIOLOWERVOLUME=Volume Down|XF86AUDIOMUTE=Mute" \
-                "|XF86AUDIOMICMUTE=Mic Mute|XF86AUDIOPLAY=Play|XF86AUDIOPAUSE=Pause" \
-                "|XF86AUDIONEXT=Next Track|XF86AUDIOPREV=Previous Track|XF86MONBRIGHTNESSUP=Brightness Up" \
-                "|XF86MONBRIGHTNESSDOWN=Brightness Down|XF86KBDBRIGHTNESSUP=Keyboard Brightness Up" \
-                "|XF86KBDBRIGHTNESSDOWN=Keyboard Brightness Down|XF86KBDLIGHTONOFF=Keyboard Light" \
-                "|XF86POWEROFF=Power|XF86EJECT=Eject|XF86CALCULATOR=Calculator|XF86TOUCHPADTOGGLE=Trackpad Toggle" \
-                "|XF86TOUCHPADON=Trackpad On|XF86TOUCHPADOFF=Trackpad Off", keys, "|")
+      keys = "RETURN=↩ ENTER=↩ KP_ENTER=⌤ TAB=⇥ BACKSPACE=⌫ DELETE=⌦ ESCAPE=⎋ ESC=⎋ " \
+             "LEFT=← RIGHT=→ UP=↑ DOWN=↓ HOME=↖ END=↘ PRIOR=⇞ PAGE_UP=⇞ NEXT=⇟ PAGE_DOWN=⇟ " \
+             "SPACE=Space COMMA=, PERIOD=. MINUS=- EQUAL== SLASH=/ BACKSLASH=\\ SEMICOLON=; " \
+             "APOSTROPHE=\x27 GRAVE=` BRACKETLEFT=[ BRACKETRIGHT=] PRINT=PrtSc CAPS_LOCK=⇪"
+      n = split(keys, pairs, " ")
       for (i = 1; i <= n; i++) {
-        eq = index(keys[i], "=")
-        name[substr(keys[i], 1, eq - 1)] = substr(keys[i], eq + 1)
+        at = index(pairs[i], "=")
+        name[substr(pairs[i], 1, at - 1)] = substr(pairs[i], at + 1)
+      }
+
+      # Media keys by what they are labelled on the keyboard. Others fall back
+      # to their XF86 name split into words.
+      n = split("AUDIORAISEVOLUME:Volume Up|AUDIOLOWERVOLUME:Volume Down|AUDIOMUTE:Mute|" \
+                "AUDIOMICMUTE:Mic Mute|AUDIOPLAY:Play|AUDIOPAUSE:Pause|AUDIONEXT:Next|" \
+                "AUDIOPREV:Previous|MONBRIGHTNESSUP:Brightness Up|MONBRIGHTNESSDOWN:Brightness Down|" \
+                "KBDBRIGHTNESSUP:Keyboard Light Up|KBDBRIGHTNESSDOWN:Keyboard Light Down", pairs, "|")
+      for (i = 1; i <= n; i++) {
+        at = index(pairs[i], ":")
+        media["XF86" substr(pairs[i], 1, at - 1)] = substr(pairs[i], at + 1)
       }
     }
     {
       arrow = index($1, " → ")
-      if (!arrow) { print; next }
-      combo = substr($1, 1, arrow - 1)
+      if (arrow == 0) { print; next }
+
+      shortcut = substr($1, 1, arrow - 1)
       action = substr($1, arrow + length(" → "))
-      sub(/[ \t]+$/, "", combo)
+      sub(/[[:space:]]+$/, "", shortcut)
 
-      plus = index(combo, " + ")
-      if (plus) { mods = substr(combo, 1, plus - 1); key = substr(combo, plus + 3) }
-      else      { mods = ""; key = combo }
+      # "SUPER SHIFT + RETURN": modifiers before " + ", the key after it.
+      split_at = index(shortcut, " + ")
+      mods = split_at ? substr(shortcut, 1, split_at - 1) : ""
+      key = split_at ? substr(shortcut, split_at + 3) : shortcut
 
-      delete have
-      m = split(mods, parts, " ")
-      for (i = 1; i <= m; i++) if (toupper(parts[i]) in rank) have[rank[toupper(parts[i])]] = 1
-      out = ""
-      for (i = 1; i <= 4; i++) if (i in have) out = out word[i] "-"
+      held = ""
+      m = split(toupper(mods), words, " ")
+      for (i = 1; i <= m; i++) if (words[i] in glyph) held = held glyph[words[i]]
+
+      symbols = ""
+      for (i = 1; i <= length(order); i++) {
+        g = substr(order, i, 1)
+        if (index(held, g)) symbols = symbols g
+      }
 
       upper = toupper(key)
       if (upper in name) key = name[upper]
-      else if (upper ~ /^XF86/) { key = substr(key, 5); gsub(/[A-Z][a-z]+/, " &", key); sub(/^ /, "", key) }
+      else if (upper in media) key = media[upper]
+      else if (upper ~ /^XF86/) {
+        key = substr(key, 5)
+        gsub(/[A-Z][a-z]+/, " &", key)
+        sub(/^ /, "", key)
+      }
+      else if (upper == "LEFT MOUSE BUTTON") key = "Click"
+      else if (upper == "RIGHT MOUSE BUTTON") key = "Right-click"
+      else if (upper == "MIDDLE MOUSE BUTTON") key = "Middle-click"
+      else if (upper == "MOUSE_DOWN") key = "Scroll ↓"
+      else if (upper == "MOUSE_UP") key = "Scroll ↑"
 
-      $1 = sprintf("%-34s → %s", out key, action)
+      $1 = sprintf("%-16s → %s", symbols key, action)
       print
     }'
 }
 
-records="$(output_binding_records | macify)"
+records=$(output_binding_records | to_mac_glyphs) || exit 1
 
 if [[ ${1-} == "--print" || ${1-} == "-p" ]]; then
   cut -f1 <<<"$records"
   exit 0
 fi
 
-selection="$(cut -f1 <<<"$records" | omarchy-menu-select 'Keybindings' -- --width 800 --height 500)"
+picked=$(cut -f1 <<<"$records" | omarchy-menu-select 'Keybindings' -- --width 800 --height 500)
+[[ -n $picked ]] || exit 0
 
-if [[ -n $selection ]]; then
-  record="$(awk -F '\t' -v selection="$selection" '$1 == selection { print; exit }' <<<"$records")"
-  dispatch_binding "$(cut -f2 <<<"$record")" "$(cut -f3- <<<"$record")"
-fi
+record=$(awk -F '\t' -v picked="$picked" '$1 == picked { print; exit }' <<<"$records")
+dispatch_binding "$(cut -f2 <<<"$record")" "$(cut -f3- <<<"$record")"

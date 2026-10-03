@@ -7,8 +7,8 @@
 -- Super is ⌘ here. With keyd mapping Left Alt to Super, that is the key next
 -- to Space, where ⌘ sits on a Mac keyboard.
 --
--- The ⌘-letter table and its terminal rule started in Macifier
--- (github.com/omeganter/macifier, MIT), commit cf9c0cd.
+-- The ⌘-letter shortcuts and their terminal rule follow Macifier
+-- (github.com/omeganter/macifier).
 
 -- Same send technique as Omarchy's own clipboard bindings, including the
 -- down/up split that works around Hyprland leaving synthetic key state stuck
@@ -138,8 +138,8 @@ o.bind("SUPER + V", "Universal paste", universal_paste)
 
 -- -------------------------------------------------------------- Keybindings
 --
--- The same list as Omarchy's, worded in Mac key names: Shift-Command-Return,
--- not SUPER SHIFT + RETURN.
+-- The same list as Omarchy's, in Mac menu symbols: ⇧⌘↩, not
+-- SUPER SHIFT + RETURN.
 hl.unbind("SUPER + K")
 o.bind("SUPER + K", "Keybindings", "mac-keybindings")
 

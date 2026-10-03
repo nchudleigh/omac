@@ -32,7 +32,7 @@ workspaces swipe like they do on a Mac.
 - **⌘ + letter.** Twelve Mac shortcuts, each sent to the app as Ctrl + the same letter.
 - **Tab-aware ⌘W.** Closes the tab, and the window once there is no tab left to close.
 - **Image paste in terminals.** ⌘V sends Ctrl+V when the clipboard holds an image.
-- **Mac key names.** ⌘K lists every shortcut as `Shift-Command-Return`, not `SUPER SHIFT + RETURN`.
+- **Mac menu symbols.** ⌘K lists every shortcut as `⇧⌘↩`, not `SUPER SHIFT + RETURN`.
 - **Workspace swipes that feel like a Mac.** A three-finger flick switches, a slow drag peeks and snaps back, and either way it slides home in 180 ms.
 - **Natural scrolling.** Content follows your fingers.
 
@@ -94,7 +94,7 @@ keyboard it is the Windows key, unless you [move it](#putting--next-to-space).
 | ⌘W | Close tab, then the window |
 | ⌘Q | Close window |
 | ⌘V | Paste, images included |
-| ⌘K | Keybindings, in Mac key names |
+| ⌘K | Keybindings, in Mac menu symbols |
 
 Two of these letters held Omarchy window bindings, which move one modifier along
 rather than disappearing:
@@ -182,8 +182,8 @@ Omarchy lists the directory with `find -type f`, which skips symlinks.
 
 ## Credits
 
-The Mac-named keybindings list (`bin/mac-keybindings`) is from
-[Macifier](https://github.com/omeganter/macifier) by **Alvaro Antolinez**, commit
-`cf9c0cd`, nearly unchanged. The ⌘-letter table and the rule that keeps it out of
-terminals started there too. If you want a dock, a ⌘Tab switcher and a bar panel
-to flip it all, Macifier has them.
+Thanks to [Macifier](https://github.com/omeganter/macifier) by **Alvaro
+Antolinez**, where this started. Its ⌘-letter shortcuts, the rule that keeps them
+out of terminals, and the idea of a keybindings list in Mac terms shaped the first
+version here. If you want a dock, a ⌘Tab switcher and a bar panel to flip it all,
+Macifier has them.
