@@ -4,10 +4,26 @@
 
 set -euo pipefail
 
-repo=$(cd "$(dirname "$0")" && pwd)
+# Empty when piped from curl: the script then has no file, and no checkout.
+src=${BASH_SOURCE[0]:-}
+repo=""
+[[ -n $src && -f $src ]] && repo=$(cd "$(dirname "$src")" && pwd)
 toggles="$HOME/.local/state/omarchy/toggles/hypr"
 
 fail() { echo "omarchy-mac: $*" >&2; exit 1; }
+
+# Piped from curl there is no checkout beside this script, so fetch one (or
+# update it) and run the installer from there.
+if [[ -z $repo || ! -f $repo/hypr/omarchy-mac.lua ]]; then
+  command -v git >/dev/null || fail "missing git"
+  dest=${OMARCHY_MAC_DIR:-$HOME/.local/share/omarchy-mac}
+  if [[ -d $dest/.git ]]; then
+    git -C "$dest" pull --ff-only -q || fail "could not update $dest"
+  else
+    git clone -q https://github.com/nchudleigh/omarchy-mac.git "$dest" || fail "could not clone into $dest"
+  fi
+  exec bash "$dest/install.sh"
+fi
 
 # Omarchy 4 configures Hyprland in Lua and loads the toggles directory last.
 # Older, hyprland.conf-based releases have neither, and nothing here would load.

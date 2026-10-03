@@ -44,12 +44,13 @@ so what a key does is one search away, and removing the file removes all of it.
 Needs Omarchy 4 or newer, the release that configures Hyprland in Lua.
 
 ```bash
-git clone https://github.com/nchudleigh/omarchy-mac.git ~/.local/share/omarchy-mac
-~/.local/share/omarchy-mac/install.sh
+curl -fsSL https://raw.githubusercontent.com/nchudleigh/omarchy-mac/main/install.sh | bash
 ```
 
-Clone it wherever you keep code; the installer points back at the checkout, so
-`git pull` and `hyprctl reload` is the whole update.
+That clones the repo into `~/.local/share/omarchy-mac` and installs from there.
+Run it again to update. To keep the checkout somewhere else, clone it yourself
+and run its `install.sh`; the installer points back at whichever checkout ran it,
+so `git pull` and `hyprctl reload` is the whole update.
 
 The installer stops rather than guessing when something is off: an Omarchy
 without the Lua config, a missing `wl-paste` or `gawk`, or
