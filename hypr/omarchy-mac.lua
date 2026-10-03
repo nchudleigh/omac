@@ -7,8 +7,8 @@
 -- Super is ⌘ here. With keyd mapping Left Alt to Super, that is the key next
 -- to Space, where ⌘ sits on a Mac keyboard.
 --
--- The ⌘ keys, scrolling, gestures and the Keybindings screen come from
--- Macifier (github.com/omeganter/macifier, MIT), commit cf9c0cd.
+-- The ⌘-letter table and its terminal rule started in Macifier
+-- (github.com/omeganter/macifier, MIT), commit cf9c0cd.
 
 -- Same send technique as Omarchy's own clipboard bindings, including the
 -- down/up split that works around Hyprland leaving synthetic key state stuck

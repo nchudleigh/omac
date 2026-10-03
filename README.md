@@ -34,7 +34,8 @@ Launchpad opens on a pinch.
 - **Tab-aware ⌘W.** Closes the tab, and the window once there is no tab left to close.
 - **Image paste in terminals.** ⌘V sends Ctrl+V when the clipboard holds an image.
 - **Mac key names.** ⌘K lists every shortcut as `Shift-Command-Return`, not `SUPER SHIFT + RETURN`.
-- **Natural scrolling and gestures.** Three fingers between workspaces, four pinched in for Launchpad.
+- **Workspace swipes that feel like a Mac.** A three-finger flick switches, a slow drag peeks and snaps back, and either way it slides home in 180 ms.
+- **Natural scrolling.** Content follows your fingers.
 - **Launchpad.** Every installed app in a full-screen grid, recent ones on top.
 
 Everything binds in one Lua file, [`hypr/omarchy-mac.lua`](hypr/omarchy-mac.lua),
@@ -201,15 +202,12 @@ Omarchy lists the directory with `find -type f`, which skips symlinks.
 
 ## Credits
 
-Most of this is [Macifier](https://github.com/omeganter/macifier) by **Alvaro
-Antolinez**, cut down to the parts used here at commit `cf9c0cd`: the ⌘-letter
-table, the terminal rule, natural scrolling, the gestures, the Mac-named
-keybindings list and Launchpad, which is his almost unchanged. Macifier does a
-great deal more, from a dock to a ⌘Tab switcher, all switchable from the bar. If
-you want the whole thing rather than this cut, install his.
-
-The tab-aware ⌘W and the image-aware ⌘V are new here.
+Launchpad (`launchpad/`) and the Mac-named keybindings list
+(`bin/mac-keybindings`) are from [Macifier](https://github.com/omeganter/macifier)
+by **Alvaro Antolinez**, commit `cf9c0cd`, nearly unchanged. The ⌘-letter table
+and the rule that keeps it out of terminals started there too. If you want a
+dock, a ⌘Tab switcher and a bar panel to flip it all, Macifier has them.
 
 ## Licence
 
-[MIT](LICENSE), as Macifier is. Both copyright lines are in the file.
+[MIT](LICENSE). The Macifier copyright line stays in the file for the code above.
