@@ -96,6 +96,7 @@ keyboard it is the Windows key, unless you [move it](#putting--next-to-space).
 | ⇧⌘ + arrow | Select to the same place |
 | ⌥← / ⌥→ | Word back / word forward, ⇧ to select |
 | ⌘[ / ⌘] | Back / forward |
+| ⇧⌘[ / ⇧⌘] | Previous tab / next tab |
 | ⌘W | Close tab, then the window |
 | ⌘Q | Close window |
 | ⌘V | Paste, images included |

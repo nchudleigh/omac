@@ -124,6 +124,10 @@ end
 o.bind("SUPER + BRACKETLEFT", "Back", caret("ALT", "LEFT", false))
 o.bind("SUPER + BRACKETRIGHT", "Forward", caret("ALT", "RIGHT", false))
 
+-- ⇧⌘] and ⇧⌘[ switch tabs, as in Safari and Chrome on a Mac.
+o.bind("SUPER + SHIFT + BRACKETRIGHT", "Next tab", caret("CTRL", "Tab", false))
+o.bind("SUPER + SHIFT + BRACKETLEFT", "Previous tab", caret("CTRL SHIFT", "Tab", false))
+
 -- ---------------------------------------------------------------------- ⌘W
 --
 -- Close the tab, or the window when no tab closed. Terminals use Ctrl+W to
