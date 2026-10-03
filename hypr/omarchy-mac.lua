@@ -165,6 +165,15 @@ hl.config({ input = { touchpad = { natural_scroll = true } } })
 -- Three fingers sideways moves between workspaces, following your fingers.
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
 
+-- A quick flick commits, as on a Mac. Hyprland's defaults need a fast swipe
+-- (speed 30) or half the screen dragged (ratio 0.5), so short flicks snap back.
+hl.config({
+  gestures = {
+    workspace_swipe_min_speed_to_force = 5,
+    workspace_swipe_cancel_ratio = 0.15,
+  },
+})
+
 -- Four fingers pinched in opens Launchpad, as on a Mac.
 hl.gesture({ fingers = 4, direction = "pinchin", action = function()
   hl.exec_cmd("omarchy-shell -q local.mac-launchpad toggle")
