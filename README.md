@@ -9,7 +9,7 @@
 
 <p align="center">
   <strong>Mac hands on Omarchy.</strong><br>
-  ⌘ shortcuts, natural scrolling, gestures and Launchpad, in one file you can read.
+  ⌘ shortcuts, natural scrolling and Mac-feel workspace swipes, in one file you can read.
 </p>
 
 <p align="center">
@@ -20,7 +20,6 @@
   <a href="#install">Install</a> ·
   <a href="#keys">Keys</a> ·
   <a href="#trackpad">Trackpad</a> ·
-  <a href="#launchpad">Launchpad</a> ·
   <a href="#how-it-works">How it works</a>
 </p>
 
@@ -28,7 +27,7 @@ Omarchy already gives you ⌘C, ⌘V and ⌘X. This adds the rest of what a Mac
 user's hands reach for without thinking: select all, undo and redo, new tab, the
 address bar, a ⌘W that closes the tab rather than the window, and a ⌘V that
 pastes screenshots into Claude Code. Then the trackpad scrolls the right way and
-Launchpad opens on a pinch.
+workspaces swipe like they do on a Mac.
 
 - **⌘ + letter.** Twelve Mac shortcuts, each sent to the app as Ctrl + the same letter.
 - **Tab-aware ⌘W.** Closes the tab, and the window once there is no tab left to close.
@@ -36,7 +35,6 @@ Launchpad opens on a pinch.
 - **Mac key names.** ⌘K lists every shortcut as `Shift-Command-Return`, not `SUPER SHIFT + RETURN`.
 - **Workspace swipes that feel like a Mac.** A three-finger flick switches, a slow drag peeks and snaps back, and either way it slides home in 180 ms.
 - **Natural scrolling.** Content follows your fingers.
-- **Launchpad.** Every installed app in a full-screen grid, recent ones on top.
 
 Everything binds in one Lua file, [`hypr/omarchy-mac.lua`](hypr/omarchy-mac.lua),
 so what a key does is one search away, and removing the file removes all of it.
@@ -51,8 +49,7 @@ git clone https://github.com/nchudleigh/omarchy-mac.git ~/.local/share/omarchy-m
 ```
 
 Clone it wherever you keep code; the installer points back at the checkout, so
-`git pull` and `hyprctl reload` is the whole update. Launchpad's QML changes
-also need `omarchy restart shell`.
+`git pull` and `hyprctl reload` is the whole update.
 
 The installer stops rather than guessing when something is off: an Omarchy
 without the Lua config, a missing `wl-paste` or `gawk`, or
@@ -66,8 +63,6 @@ same keys and would make both fire.
 |---|---|
 | `~/.local/state/omarchy/toggles/hypr/omarchy-mac.lua` | One line that loads `hypr/omarchy-mac.lua` from the checkout |
 | `~/.local/bin/mac-keybindings` | Link to `bin/mac-keybindings`, the ⌘K list |
-| `~/.config/omarchy/plugins/mac-launchpad` | Link to `launchpad/`, enabled as `local.mac-launchpad` |
-| `~/.local/state/omarchy-mac/` | Launchpad's recently opened apps |
 
 Nothing is written to `~/.config/hypr` or `/usr/share/omarchy`.
 
@@ -75,8 +70,7 @@ Nothing is written to `~/.config/hypr` or `/usr/share/omarchy`.
 ~/.local/share/omarchy-mac/uninstall.sh
 ```
 
-That disables Launchpad, removes all four paths and reloads Hyprland. Delete the
-checkout afterwards if you like.
+That removes both and reloads Hyprland. Delete the checkout afterwards if you like.
 
 </details>
 
@@ -100,7 +94,6 @@ keyboard it is the Windows key, unless you [move it](#putting--next-to-space).
 | ⌘Q | Close window |
 | ⌘V | Paste, images included |
 | ⌘K | Keybindings, in Mac key names |
-| ⌘⌥A | Launchpad |
 
 Two of these letters held Omarchy window bindings, which move one modifier along
 rather than disappearing:
@@ -156,26 +149,12 @@ and is wrong for an Apple one.
 |---|---|
 | Two fingers | Scroll, naturally: content follows your fingers |
 | Three fingers sideways | Move between workspaces, following your fingers. A quick flick switches; a slow drag peeks and snaps back unless it passes halfway |
-| Four fingers pinched in | Launchpad |
 
 When you let go, the workspace slides the rest of the way with an ease-out cubic in 180 ms. Omarchy ships workspace animations off, so this also animates Super+1–9.
 
 Two fingers can never be a gesture here. libinput reads two fingers as scrolling
 and only three or more as a swipe, so nothing in Hyprland ever sees a two-finger
 swipe.
-
-## Launchpad
-
-**⌘⌥A** or a four-finger pinch opens every installed application in a full-screen
-grid. It scrolls down like the Apps view that replaced Launchpad in macOS 26, with
-the apps you last opened in a row on top, however you opened them.
-
-Type to filter. Arrow keys walk the grid, Enter or a click launches, Escape clears
-what you typed and a second Escape closes. Apps marked `NoDisplay` are left out,
-which is what keeps MIME handlers and helper entries off the grid.
-
-Recents are learned from Hyprland's window-open events and kept in
-`~/.local/state/omarchy-mac/launchpad-recents.json`. Uninstalling deletes it.
 
 ## How it works
 
@@ -191,7 +170,7 @@ Omarchy lists the directory with `find -type f`, which skips symlinks.
 
 - **⌘Tab app switching.** Super+Tab stays Omarchy's workspace switcher. Moving
   workspace cycling to Super+Alt+Tab collides with Omarchy's next-window-in-group.
-- **A dock.** Omarchy's launcher and Launchpad cover it.
+- **A dock or Launchpad.** Omarchy's launcher on Super+Space is faster: type a few letters.
 - **⌘F, ⌘S, ⌘P, ⌘O, ⌘G.** Each holds an Omarchy window binding (full screen,
   scratchpad and so on) that people use daily. Copy the ⌘T pattern in the Lua
   file to take one.
@@ -202,11 +181,11 @@ Omarchy lists the directory with `find -type f`, which skips symlinks.
 
 ## Credits
 
-Launchpad (`launchpad/`) and the Mac-named keybindings list
-(`bin/mac-keybindings`) are from [Macifier](https://github.com/omeganter/macifier)
-by **Alvaro Antolinez**, commit `cf9c0cd`, nearly unchanged. The ⌘-letter table
-and the rule that keeps it out of terminals started there too. If you want a
-dock, a ⌘Tab switcher and a bar panel to flip it all, Macifier has them.
+The Mac-named keybindings list (`bin/mac-keybindings`) is from
+[Macifier](https://github.com/omeganter/macifier) by **Alvaro Antolinez**, commit
+`cf9c0cd`, nearly unchanged. The ⌘-letter table and the rule that keeps it out of
+terminals started there too. If you want a dock, Launchpad, a ⌘Tab switcher and a
+bar panel to flip it all, Macifier has them.
 
 ## Licence
 

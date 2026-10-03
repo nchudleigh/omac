@@ -149,9 +149,6 @@ o.bind("SUPER + V", "Universal paste", universal_paste)
 hl.unbind("SUPER + K")
 o.bind("SUPER + K", "Keybindings", "mac-keybindings")
 
--- ---------------------------------------------------------------- Launchpad
-o.bind("SUPER + ALT + A", "Launchpad", "omarchy-shell local.mac-launchpad toggle")
-
 -- ------------------------------------------------------- Trackpad scrolling
 --
 -- macOS has shipped natural scrolling since 2011; Omarchy ships PC-style.
@@ -180,8 +177,3 @@ hl.config({
 -- tenths of a second). This also animates Super+1..9 switches.
 hl.curve("easeOutCubic", { type = "bezier", points = { { 0.33, 1 }, { 0.68, 1 } } })
 hl.animation({ leaf = "workspaces", enabled = true, speed = 1.8, bezier = "easeOutCubic", style = "slide" })
-
--- Four fingers pinched in opens Launchpad, as on a Mac.
-hl.gesture({ fingers = 4, direction = "pinchin", action = function()
-  hl.exec_cmd("omarchy-shell -q local.mac-launchpad toggle")
-end })
