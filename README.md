@@ -52,11 +52,6 @@ Run it again to update. To keep the checkout somewhere else, clone it yourself
 and run its `install.sh`; the installer points back at whichever checkout ran it,
 so `git pull` and `hyprctl reload` is the whole update.
 
-The installer stops rather than guessing when something is off: an Omarchy
-without the Lua config, a missing `wl-paste` or `gawk`, or
-[Macifier](https://github.com/omeganter/macifier) still active, which binds the
-same keys and would make both fire.
-
 <details>
 <summary>What the installer touches, and removal</summary>
 
