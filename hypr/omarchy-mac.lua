@@ -165,12 +165,13 @@ hl.config({ input = { touchpad = { natural_scroll = true } } })
 -- Three fingers sideways moves between workspaces, following your fingers.
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
 
--- A quick flick commits, as on a Mac. Hyprland's defaults need a fast swipe
--- (speed 30) or half the screen dragged (ratio 0.5), so short flicks snap back.
+-- As on a Mac, a slow drag is a peek: it snaps back unless it passes half the
+-- screen. A quick flick commits however short it is. Hyprland's default flick
+-- speed (30) is so high that short flicks snap back too.
 hl.config({
   gestures = {
-    workspace_swipe_min_speed_to_force = 5,
-    workspace_swipe_cancel_ratio = 0.15,
+    workspace_swipe_min_speed_to_force = 10,
+    workspace_swipe_cancel_ratio = 0.5,
   },
 })
 

@@ -151,7 +151,7 @@ and is wrong for an Apple one.
 | Gesture | Does |
 |---|---|
 | Two fingers | Scroll, naturally: content follows your fingers |
-| Three fingers sideways | Move between workspaces, following your fingers |
+| Three fingers sideways | Move between workspaces, following your fingers. A quick flick switches; a slow drag peeks and snaps back unless it passes halfway |
 | Four fingers pinched in | Launchpad |
 
 Two fingers can never be a gesture here. libinput reads two fingers as scrolling
