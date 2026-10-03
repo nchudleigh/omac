@@ -187,7 +187,3 @@ The Mac-named keybindings list (`bin/mac-keybindings`) is from
 `cf9c0cd`, nearly unchanged. The ⌘-letter table and the rule that keeps it out of
 terminals started there too. If you want a dock, a ⌘Tab switcher and a bar panel
 to flip it all, Macifier has them.
-
-## Licence
-
-[MIT](LICENSE). The Macifier copyright line stays in the file for the code above.
