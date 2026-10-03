@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="docs/images/icon.svg" width="72" height="72" alt="omarchy-mac">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/icon-dark.svg">
+    <img src="docs/images/icon-light.svg" width="72" height="72" alt="omarchy-mac">
+  </picture>
 </p>
 
 <h1 align="center">omarchy-mac</h1>
