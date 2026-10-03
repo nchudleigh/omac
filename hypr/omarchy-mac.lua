@@ -119,21 +119,15 @@ o.bind("SUPER + W", "Close tab", close_tab_or_window)
 -- ---------------------------------------------------------------------- ⌘V
 --
 -- Omarchy's universal paste sends Shift+Insert in terminals, which only pastes
--- text. Terminal apps like Claude Code read a clipboard image on Ctrl+V, so send
--- that when the clipboard holds an image.
-local function clipboard_has_image()
-  local pipe = io.popen("timeout 0.2 wl-paste --list-types 2>/dev/null")
-  if not pipe then
-    return false
-  end
-  local types = pipe:read("*a")
-  pipe:close()
-  return types:find("image/", 1, true) ~= nil
-end
-
+-- text. Terminal apps like Claude Code read a clipboard image on Ctrl+V, so
+-- mac-paste sends that when the clipboard holds an image.
+--
+-- Never check the clipboard from here: wl-paste needs Hyprland to answer, so
+-- waiting on it from the config freezes the whole desktop. mac-paste runs as
+-- its own process and sends the keys back with hyprctl.
 local function universal_paste()
-  if active_window_is_terminal() and not clipboard_has_image() then
-    send_once("SHIFT", "Insert")
+  if active_window_is_terminal() then
+    hl.exec_cmd(os.getenv("HOME") .. "/.local/bin/mac-paste")
   else
     send_once("CTRL", "V")
   end

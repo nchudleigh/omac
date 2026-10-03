@@ -63,6 +63,7 @@ same keys and would make both fire.
 |---|---|
 | `~/.local/state/omarchy/toggles/hypr/omarchy-mac.lua` | One line that loads `hypr/omarchy-mac.lua` from the checkout |
 | `~/.local/bin/mac-keybindings` | Link to `bin/mac-keybindings`, the ⌘K list |
+| `~/.local/bin/mac-paste` | Link to `bin/mac-paste`, the terminal half of ⌘V |
 
 Nothing is written to `~/.config/hypr` or `/usr/share/omarchy`.
 
@@ -70,7 +71,7 @@ Nothing is written to `~/.config/hypr` or `/usr/share/omarchy`.
 ~/.local/share/omarchy-mac/uninstall.sh
 ```
 
-That removes both and reloads Hyprland. Delete the checkout afterwards if you like.
+That removes all three and reloads Hyprland. Delete the checkout afterwards if you like.
 
 </details>
 
@@ -113,8 +114,9 @@ the same one its clipboard bindings use.
 ⌘W closes the terminal window, because Ctrl+W there deletes a word. ⌘V pastes
 text with Shift+Insert, as Omarchy does, unless the clipboard holds an image:
 then it sends Ctrl+V, which is what Claude Code and other terminal apps read an
-image on. Checking the clipboard costs about 50 ms and gives up after 200 ms if
-the app holding it does not answer.
+image on. The clipboard check runs in its own process, `bin/mac-paste`, and gives
+up after half a second. It never runs inside Hyprland's config: `wl-paste` needs
+Hyprland to answer, so waiting on it from there freezes the whole desktop.
 
 ### How ⌘W knows
 

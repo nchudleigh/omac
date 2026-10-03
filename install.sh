@@ -29,6 +29,7 @@ mkdir -p "$toggles" "$HOME/.local/bin"
 rm -f "$toggles/omarchy-mac.lua"
 printf -- '-- Written by omarchy-mac install.sh.\ndofile([[%s]])\n' "$repo/hypr/omarchy-mac.lua" > "$toggles/omarchy-mac.lua"
 ln -sfn "$repo/bin/mac-keybindings" "$HOME/.local/bin/mac-keybindings"
+ln -sfn "$repo/bin/mac-paste" "$HOME/.local/bin/mac-paste"
 
 # A new file in the toggles directory registers its bindings only on reload.
 hyprctl reload >/dev/null

@@ -1,0 +1,21 @@
+#!/bin/bash
+# ⌘V in a terminal: Ctrl+V when the clipboard holds an image, Shift+Insert
+# otherwise.
+#
+# This runs as its own process, never inside Hyprland's config. wl-paste needs
+# Hyprland to answer, so waiting on it from the config deadlocks the compositor,
+# and `timeout` cannot break that: children of Hyprland inherit its blocked
+# SIGTERM. Hence SIGKILL, which cannot be blocked.
+
+if timeout -s KILL 0.5 wl-paste --list-types 2>/dev/null | grep -q '^image/'; then
+  mods=CTRL key=V
+else
+  mods=SHIFT key=Insert
+fi
+
+exec hyprctl eval "
+  hl.dispatch(hl.dsp.send_key_state({ mods = '$mods', key = '$key', state = 'down' }))
+  hl.timer(function()
+    hl.dispatch(hl.dsp.send_key_state({ mods = '$mods', key = '$key', state = 'up' }))
+  end, { timeout = 50, type = 'oneshot' })
+" >/dev/null
