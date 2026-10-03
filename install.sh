@@ -1,6 +1,9 @@
 #!/bin/bash
-# Hook omarchy-mac into the places Omarchy loads from. Everything points back at
-# this checkout, so editing it and running `hyprctl reload` is the whole update.
+# Hook omac into the places Omarchy loads from. Everything points back at this
+# checkout, so editing it and running `hyprctl reload` is the whole update.
+#
+# The Omarchy plugin runs this on every shell start, so a run that finds
+# everything already in place changes nothing and reloads nothing.
 
 set -euo pipefail
 
@@ -9,18 +12,19 @@ src=${BASH_SOURCE[0]:-}
 repo=""
 [[ -n $src && -f $src ]] && repo=$(cd "$(dirname "$src")" && pwd)
 toggles="$HOME/.local/state/omarchy/toggles/hypr"
+bin="$HOME/.local/bin"
 
-fail() { echo "omarchy-mac: $*" >&2; exit 1; }
+fail() { echo "omac: $*" >&2; exit 1; }
 
 # Piped from curl there is no checkout beside this script, so fetch one (or
 # update it) and run the installer from there.
-if [[ -z $repo || ! -f $repo/hypr/omarchy-mac.lua ]]; then
+if [[ -z $repo || ! -f $repo/hypr/omac.lua ]]; then
   command -v git >/dev/null || fail "missing git"
-  dest=${OMARCHY_MAC_DIR:-$HOME/.local/share/omarchy-mac}
+  dest=${OMAC_DIR:-$HOME/.local/share/omac}
   if [[ -d $dest/.git ]]; then
     git -C "$dest" pull --ff-only -q || fail "could not update $dest"
   else
-    git clone -q https://github.com/nchudleigh/omarchy-mac.git "$dest" || fail "could not clone into $dest"
+    git clone -q https://github.com/nchudleigh/omac.git "$dest" || fail "could not clone into $dest"
   fi
   exec bash "$dest/install.sh"
 fi
@@ -38,14 +42,34 @@ if compgen -G "$toggles/macifier-*.lua" >/dev/null; then
   fail "Macifier is active; run 'omarchy-macifier preset off' first"
 fi
 
-mkdir -p "$toggles" "$HOME/.local/bin"
+mkdir -p "$toggles" "$bin"
+changed=no
+
+# Before the rename this was omarchy-mac; two hooks would bind every key twice.
+if [[ -e $toggles/omarchy-mac.lua ]]; then
+  rm -f "$toggles/omarchy-mac.lua"
+  changed=yes
+fi
 
 # Omarchy lists this directory with `find -type f`, which skips symlinks, so
 # the toggle is a real file that loads the checkout.
-rm -f "$toggles/omarchy-mac.lua"
-printf -- '-- Written by omarchy-mac install.sh.\ndofile([[%s]])\n' "$repo/hypr/omarchy-mac.lua" > "$toggles/omarchy-mac.lua"
-ln -sfn "$repo/bin/mac-keybindings" "$HOME/.local/bin/mac-keybindings"
-ln -sfn "$repo/bin/mac-paste" "$HOME/.local/bin/mac-paste"
+hook=$(printf -- '-- Written by omac install.sh.\ndofile([[%s]])' "$repo/hypr/omac.lua")
+if [[ ! -f $toggles/omac.lua || $(<"$toggles/omac.lua") != "$hook" ]]; then
+  printf '%s\n' "$hook" > "$toggles/omac.lua"
+  changed=yes
+fi
+
+for tool in mac-keybindings mac-paste; do
+  if [[ $(readlink "$bin/$tool" 2>/dev/null) != "$repo/bin/$tool" ]]; then
+    ln -sfn "$repo/bin/$tool" "$bin/$tool"
+    changed=yes
+  fi
+done
+
+if [[ $changed == no ]]; then
+  echo "omac is already installed."
+  exit 0
+fi
 
 # A new file in the toggles directory registers its bindings only on reload.
 hyprctl reload >/dev/null
@@ -55,4 +79,4 @@ if [[ -n ${errors//[[:space:]]/} ]]; then
   exit 1
 fi
 
-echo "omarchy-mac installed."
+echo "omac installed."

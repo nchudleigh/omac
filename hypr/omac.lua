@@ -1,4 +1,4 @@
--- omarchy-mac: Mac-style keys, scrolling and gestures for Omarchy.
+-- omac: Mac-style keys, scrolling and gestures for Omarchy.
 --
 -- install.sh loads this file from ~/.local/state/omarchy/toggles/hypr/, which
 -- Omarchy loads after ~/.config/hypr/bindings.lua. Run `hyprctl reload` after

@@ -1,15 +1,15 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/icon-dark.svg">
-    <img src="docs/images/icon-light.svg" width="72" height="72" alt="omarchy-mac">
+    <img src="docs/images/icon-light.svg" width="72" height="72" alt="omac">
   </picture>
 </p>
 
-<h1 align="center">omarchy-mac</h1>
+<h1 align="center">omac</h1>
 
 <p align="center">
   <strong>Mac hands on Omarchy.</strong><br>
-  ⌘ shortcuts, natural scrolling and Mac-feel workspace swipes, in one file you can read.
+  ⌘ shortcuts, Mac caret movement and Mac-feel workspace swipes, in one file you can read.
 </p>
 
 <p align="center">
@@ -25,51 +25,76 @@
 
 Omarchy already gives you ⌘C, ⌘V and ⌘X. This adds the rest of what a Mac
 user's hands reach for without thinking: select all, undo and redo, new tab, the
-address bar, a ⌘W that closes the tab rather than the window, and a ⌘V that
-pastes screenshots into Claude Code. Then the trackpad scrolls the right way and
-workspaces swipe like they do on a Mac.
+address bar, ⌘ and ⌥ arrows that move the caret, a ⌘W that closes the tab rather
+than the window, and a ⌘V that pastes screenshots into Claude Code. Then the
+trackpad scrolls the right way and workspaces swipe like they do on a Mac.
 
 - **⌘ + letter.** Twelve Mac shortcuts, each sent to the app as Ctrl + the same letter.
+- **Mac caret movement.** ⌘ arrows to line and document ends, ⌥ arrows by word, ⇧ to select.
 - **Tab-aware ⌘W.** Closes the tab, and the window once there is no tab left to close.
 - **Image paste in terminals.** ⌘V sends Ctrl+V when the clipboard holds an image.
 - **Mac menu symbols.** ⌘K lists every shortcut as `⇧⌘↩`, not `SUPER SHIFT + RETURN`.
 - **Workspace swipes that feel like a Mac.** A three-finger flick switches, a slow drag peeks and snaps back, and either way it slides home in 180 ms.
 - **Natural scrolling.** Content follows your fingers.
 
-Everything binds in one Lua file, [`hypr/omarchy-mac.lua`](hypr/omarchy-mac.lua),
-so what a key does is one search away, and removing the file removes all of it.
+Everything binds in one Lua file, [`hypr/omac.lua`](hypr/omac.lua), so what a
+key does is one search away, and removing the file removes all of it.
 
 ## Install
 
 Needs Omarchy 4 or newer, the release that configures Hyprland in Lua.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nchudleigh/omarchy-mac/main/install.sh | bash
+omarchy plugin add https://github.com/nchudleigh/omac --enable
 ```
 
-That clones the repo into `~/.local/share/omarchy-mac` and installs from there.
-Run it again to update. To keep the checkout somewhere else, clone it yourself
-and run its `install.sh`; the installer points back at whichever checkout ran it,
-so `git pull` and `hyprctl reload` is the whole update.
+The plugin runs [`install.sh`](install.sh) from its folder every time the shell
+starts: the first run hooks the bindings into Hyprland, and later runs find
+everything in place and do nothing. If something stops it, such as an Omarchy
+without the Lua config, a desktop notification says why.
+
+Without the plugin system, the same installer works on its own:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/nchudleigh/omac/main/install.sh | bash
+```
+
+That clones the repo into `~/.local/share/omac` and installs from there. Run it
+again to update. To keep the checkout somewhere else, clone it yourself and run
+its `install.sh`; the installer points back at whichever checkout ran it, so
+`git pull` and `hyprctl reload` is the whole update.
 
 <details>
-<summary>What the installer touches, and removal</summary>
+<summary>What the installer touches</summary>
 
 | Path | What it is |
 |---|---|
-| `~/.local/state/omarchy/toggles/hypr/omarchy-mac.lua` | One line that loads `hypr/omarchy-mac.lua` from the checkout |
+| `~/.local/state/omarchy/toggles/hypr/omac.lua` | One line that loads `hypr/omac.lua` from the checkout |
 | `~/.local/bin/mac-keybindings` | Link to `bin/mac-keybindings`, the ⌘K list |
 | `~/.local/bin/mac-paste` | Link to `bin/mac-paste`, the terminal half of ⌘V |
 
 Nothing is written to `~/.config/hypr` or `/usr/share/omarchy`.
 
+</details>
+
+## Remove
+
+Installed as a plugin, run the uninstaller first, or the plugin hooks omac back
+in on the next shell start:
+
 ```bash
-~/.local/share/omarchy-mac/uninstall.sh
+~/.config/omarchy/plugins/io.github.nchudleigh.omac/uninstall.sh
+omarchy plugin remove io.github.nchudleigh.omac
 ```
 
-That removes all three and reloads Hyprland. Delete the checkout afterwards if you like.
+Installed with curl:
 
-</details>
+```bash
+~/.local/share/omac/uninstall.sh && rm -rf ~/.local/share/omac
+```
+
+The uninstaller removes the three paths above and reloads Hyprland, which puts
+Omarchy's own bindings back.
 
 ## Keys
 
