@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "local.mac-launchpad",
+  "name": "Launchpad",
+  "version": "0.1.0",
+  "author": "Neil Chudleigh",
+  "license": "MIT",
+  "description": "Full-screen grid of every installed application. Type to filter, Enter to launch. From Macifier.",
+  "kinds": ["overlay"],
+  "keepLoaded": true,
+  "entryPoints": { "overlay": "Launchpad.qml" }
+}
