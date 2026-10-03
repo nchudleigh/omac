@@ -94,6 +94,8 @@ keyboard it is the Windows key, unless you [move it](#putting--next-to-space).
 | ⌘← / ⌘→ | Line start / line end |
 | ⌘↑ / ⌘↓ | Document start / document end |
 | ⇧⌘ + arrow | Select to the same place |
+| ⌥← / ⌥→ | Word back / word forward, ⇧ to select |
+| ⌘[ / ⌘] | Back / forward |
 | ⌘W | Close tab, then the window |
 | ⌘Q | Close window |
 | ⌘V | Paste, images included |
@@ -109,12 +111,15 @@ than disappearing:
 | Focus window by direction | Super+arrows | Ctrl+Alt+arrows |
 | Swap window by direction | Super+Shift+arrows | Ctrl+Alt+Shift+arrows |
 
+⌥← and ⌥→ take Alt+arrow, which browsers use for back and forward, so ⌘[ and ⌘]
+do that instead, as on a Mac.
+
 ### In terminals
 
 The ⌘-letter keys do nothing in a terminal. Ctrl+Z suspends a job, Ctrl+D closes
 the shell and Ctrl+A moves to the start of the line, so sending them would be
-worse than doing nothing. ⌘← and ⌘→ still work there, as Home and End, which
-shells and Claude Code read as line start and end. "Terminal" means Omarchy's own `terminal` window tag,
+worse than doing nothing. ⌘← and ⌘→ still work there, as Home and End, and ⌥←
+and ⌥→ still move by word, because bash reads Ctrl+arrow as a word move. "Terminal" means Omarchy's own `terminal` window tag,
 the same one its clipboard bindings use.
 
 ⌘W closes the terminal window, because Ctrl+W there deletes a word. ⌘V pastes

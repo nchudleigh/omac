@@ -111,6 +111,19 @@ for _, a in ipairs(arrows) do
   o.bind("SUPER + SHIFT + " .. a.key, "Select to " .. label:lower(), caret(mods == "" and "SHIFT" or "CTRL SHIFT", a.to, false))
 end
 
+-- ⌥← and ⌥→ move by word, ⇧ to select. Linux spells that Ctrl+arrow, which
+-- bash reads as a word move too, so the plain move also works in terminals.
+for _, key in ipairs({ "LEFT", "RIGHT" }) do
+  local side = key == "LEFT" and "back" or "forward"
+  o.bind("ALT + " .. key, "Word " .. side, caret("CTRL", key, true))
+  o.bind("ALT + SHIFT + " .. key, "Select word " .. side, caret("CTRL SHIFT", key, false))
+end
+
+-- Taking ⌥← and ⌥→ costs browsers their Alt+arrow back and forward, so give
+-- them the Mac keys for it, ⌘[ and ⌘].
+o.bind("SUPER + BRACKETLEFT", "Back", caret("ALT", "LEFT", false))
+o.bind("SUPER + BRACKETRIGHT", "Forward", caret("ALT", "RIGHT", false))
+
 -- ---------------------------------------------------------------------- ⌘W
 --
 -- Close the tab, or the window when no tab closed. Terminals use Ctrl+W to
