@@ -53,16 +53,9 @@ starts: the first run hooks the bindings into Hyprland, and later runs find
 everything in place and do nothing. If something stops it, such as an Omarchy
 without the Lua config, a desktop notification says why.
 
-Without the plugin system, the same installer works on its own:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/nchudleigh/omac/main/install.sh | bash
-```
-
-That clones the repo into `~/.local/share/omac` and installs from there. Run it
-again to update. To keep the checkout somewhere else, clone it yourself and run
-its `install.sh`; the installer points back at whichever checkout ran it, so
-`git pull` and `hyprctl reload` is the whole update.
+`install.sh` also works on its own from any checkout of this repo, and points
+Hyprland back at that checkout, so editing it and running `hyprctl reload` is the
+whole update.
 
 <details>
 <summary>What the installer touches</summary>
@@ -87,11 +80,7 @@ in on the next shell start:
 omarchy plugin remove io.github.nchudleigh.omac
 ```
 
-Installed with curl:
-
-```bash
-~/.local/share/omac/uninstall.sh && rm -rf ~/.local/share/omac
-```
+Run from a checkout of your own, use that checkout's `uninstall.sh`.
 
 The uninstaller removes the three paths above and reloads Hyprland, which puts
 Omarchy's own bindings back.

@@ -7,27 +7,13 @@
 
 set -euo pipefail
 
-# Empty when piped from curl: the script then has no file, and no checkout.
-src=${BASH_SOURCE[0]:-}
-repo=""
-[[ -n $src && -f $src ]] && repo=$(cd "$(dirname "$src")" && pwd)
+repo=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 toggles="$HOME/.local/state/omarchy/toggles/hypr"
 bin="$HOME/.local/bin"
 
 fail() { echo "omac: $*" >&2; exit 1; }
 
-# Piped from curl there is no checkout beside this script, so fetch one (or
-# update it) and run the installer from there.
-if [[ -z $repo || ! -f $repo/hypr/omac.lua ]]; then
-  command -v git >/dev/null || fail "missing git"
-  dest=${OMAC_DIR:-$HOME/.local/share/omac}
-  if [[ -d $dest/.git ]]; then
-    git -C "$dest" pull --ff-only -q || fail "could not update $dest"
-  else
-    git clone -q https://github.com/nchudleigh/omac.git "$dest" || fail "could not clone into $dest"
-  fi
-  exec bash "$dest/install.sh"
-fi
+[[ -f $repo/hypr/omac.lua ]] || fail "run install.sh from an omac checkout"
 
 # Omarchy 4 configures Hyprland in Lua and loads the toggles directory last.
 # Older, hyprland.conf-based releases have neither, and nothing here would load.
