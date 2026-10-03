@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">
+  <!-- The Command key's place-of-interest sign on the 24 grid, in the Tokyo Night palette Flea's mark uses. -->
+  <rect width="24" height="24" fill="#1a1b26"/>
+  <g fill="none" stroke="#9ece6a" stroke-width="1.6" stroke-linecap="square">
+    <path d="M9 6.5V17.5M15 6.5V17.5M6.5 9H17.5M6.5 15H17.5"/>
+    <circle cx="6.5" cy="6.5" r="2.5"/>
+    <circle cx="17.5" cy="6.5" r="2.5"/>
+    <circle cx="6.5" cy="17.5" r="2.5"/>
+    <circle cx="17.5" cy="17.5" r="2.5"/>
+  </g>
+</svg>
