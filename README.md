@@ -170,7 +170,6 @@ Omarchy lists the directory with `find -type f`, which skips symlinks.
 
 - **⌘Tab app switching.** Super+Tab stays Omarchy's workspace switcher. Moving
   workspace cycling to Super+Alt+Tab collides with Omarchy's next-window-in-group.
-- **A dock or Launchpad.** Omarchy's launcher on Super+Space is faster: type a few letters.
 - **⌘F, ⌘S, ⌘P, ⌘O, ⌘G.** Each holds an Omarchy window binding (full screen,
   scratchpad and so on) that people use daily. Copy the ⌘T pattern in the Lua
   file to take one.
@@ -184,8 +183,8 @@ Omarchy lists the directory with `find -type f`, which skips symlinks.
 The Mac-named keybindings list (`bin/mac-keybindings`) is from
 [Macifier](https://github.com/omeganter/macifier) by **Alvaro Antolinez**, commit
 `cf9c0cd`, nearly unchanged. The ⌘-letter table and the rule that keeps it out of
-terminals started there too. If you want a dock, Launchpad, a ⌘Tab switcher and a
-bar panel to flip it all, Macifier has them.
+terminals started there too. If you want a dock, a ⌘Tab switcher and a bar panel
+to flip it all, Macifier has them.
 
 ## Licence
 
