@@ -8,7 +8,7 @@
 <h1 align="center">omac</h1>
 
 <p align="center">
-  <strong>Mac hands on Omarchy.</strong><br>
+  <strong>Mac-like nav for Omarchy.</strong><br>
   ⌘ shortcuts, Mac caret movement and Mac-feel workspace swipes, in one file you can read.
 </p>
 
@@ -111,6 +111,9 @@ keyboard it is the Windows key, unless you [move it](#putting--next-to-space).
 | ⌘Q | Close window |
 | ⌘V | Paste, images included |
 | ⌘K | Keybindings, in Mac menu symbols |
+| ⇧⌥3 / ⇧⌥4 | Screenshot the screen / an area or window |
+| ⌃⇧⌥3 / ⌃⇧⌥4 | The same, to the clipboard only |
+| ⇧⌥5 | Capture menu: screenshot, recording, text, colour |
 
 Some of these keys held Omarchy window bindings, which move to Ctrl+Alt rather
 than disappearing:
@@ -124,6 +127,10 @@ than disappearing:
 
 ⌥← and ⌥→ take Alt+arrow, which browsers use for back and forward, so ⌘[ and ⌘]
 do that instead, as on a Mac.
+
+Screenshots use ⌥ where a Mac uses ⌘, because Super+Shift+number moves windows
+between workspaces. As on a Mac, a capture saves a file and shows a thumbnail
+you can click to mark up; it also lands on the clipboard.
 
 ### In terminals
 

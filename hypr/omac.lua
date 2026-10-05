@@ -188,6 +188,24 @@ end
 hl.unbind("SUPER + V")
 o.bind("SUPER + V", "Universal paste", universal_paste)
 
+-- -------------------------------------------------------------- Screenshots
+--
+-- macOS screenshots with ⌥ standing in for ⌘, because Super+Shift+number
+-- moves windows between workspaces. Number keys bind by key code (3 is
+-- code:12), since Shift changes the symbol they type.
+--
+--   ⇧⌥3   whole screen         ⌃⇧⌥3   whole screen to the clipboard
+--   ⇧⌥4   area, or a window    ⌃⇧⌥4   area or window to the clipboard
+--   ⇧⌥5   capture menu: screenshot, recording, text, colour
+--
+-- Like a Mac, a plain capture saves a file and shows a thumbnail to click and
+-- mark up. Omarchy's capture also copies it to the clipboard.
+o.bind("ALT + SHIFT + code:12", "Screenshot of the screen", "omarchy-capture-screenshot fullscreen")
+o.bind("ALT + SHIFT + code:13", "Screenshot of an area or window", "omarchy-capture-screenshot smart")
+o.bind("ALT + SHIFT + code:14", "Capture menu", "omarchy-menu toggle trigger.capture")
+o.bind("CTRL + ALT + SHIFT + code:12", "Copy the screen", "omarchy-capture-screenshot fullscreen copy")
+o.bind("CTRL + ALT + SHIFT + code:13", "Copy an area or window", "omarchy-capture-screenshot smart copy")
+
 -- -------------------------------------------------------------- Keybindings
 --
 -- The same list as Omarchy's, in Mac menu symbols: ⇧⌘↩, not
