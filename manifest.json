@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "author": "Neil Chudleigh",
   "license": "MIT",
-  "description": "Mac hands on Omarchy: ⌘ shortcuts, Mac caret movement, tab-aware ⌘W, image paste in terminals and Mac-feel workspace swipes.",
+  "description": "Mac-like nav for Omarchy: ⌘ shortcuts, Mac caret movement, tab-aware ⌘W, image paste in terminals and Mac-feel workspace swipes.",
   "kinds": ["service"],
   "entryPoints": { "service": "Service.qml" }
 }
