@@ -128,6 +128,51 @@ o.bind("SUPER + BRACKETRIGHT", "Forward", caret("ALT", "RIGHT", false))
 o.bind("SUPER + SHIFT + BRACKETRIGHT", "Next tab", caret("CTRL", "Tab", false))
 o.bind("SUPER + SHIFT + BRACKETLEFT", "Previous tab", caret("CTRL SHIFT", "Tab", false))
 
+-- ---------------------------------------------------------------- ⌘⌫ and ⌥⌫
+--
+-- Delete back to the line start, or one word, as on a Mac. Terminals get the
+-- readline keys, Ctrl+U and Ctrl+W; other apps select to Home and delete, or
+-- take Ctrl+Backspace, which GTK, Qt and browsers read as a word delete.
+--
+-- Herdr is a terminal Omarchy doesn't tag, and tagging it would send its ⌘V
+-- down the Shift+Insert path it doesn't paste on, so it is named here only.
+local function deletes_like_terminal()
+  local window = hl.get_active_window()
+  return active_window_is_terminal() or (window ~= nil and window.class == "herdr-app")
+end
+
+-- Each key goes down and up before the next, 25 ms apart.
+local function send_keys(keys)
+  local events = {}
+  for _, k in ipairs(keys) do
+    table.insert(events, { mods = k[1], key = k[2], state = "down" })
+    table.insert(events, { mods = k[1], key = k[2], state = "up" })
+  end
+
+  local function send(i)
+    hl.dispatch(hl.dsp.send_key_state(events[i]))
+    if i < #events then
+      hl.timer(function()
+        send(i + 1)
+      end, { timeout = 25, type = "oneshot" })
+    end
+  end
+  send(1)
+end
+
+local function delete_back(terminal_keys, app_keys)
+  return function()
+    send_keys(deletes_like_terminal() and terminal_keys or app_keys)
+  end
+end
+
+-- Omarchy's ⌘⌫ toggles window transparency, which moves to ⌘⌥⌫.
+hl.unbind("SUPER + BACKSPACE")
+hl.unbind("SUPER + ALT + BACKSPACE")
+o.bind("SUPER + ALT + BACKSPACE", "Toggle transparency on a window", "omarchy-hyprland-window-transparency-toggle")
+o.bind("SUPER + BACKSPACE", "Delete to line start", delete_back({ { "CTRL", "U" } }, { { "SHIFT", "HOME" }, { "", "BACKSPACE" } }))
+o.bind("ALT + BACKSPACE", "Delete word back", delete_back({ { "CTRL", "W" } }, { { "CTRL", "BACKSPACE" } }))
+
 -- ---------------------------------------------------------------------- ⌘W
 --
 -- Close the tab, or the window when no tab closed. Terminals use Ctrl+W to
