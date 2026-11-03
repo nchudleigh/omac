@@ -105,6 +105,7 @@ keyboard it is the Windows key, unless you [move it](#putting--next-to-space).
 | ⌘↑ / ⌘↓ | Document start / document end |
 | ⇧⌘ + arrow | Select to the same place |
 | ⌥← / ⌥→ | Word back / word forward, ⇧ to select |
+| ⌘⌫ / ⌥⌫ | Delete to line start / delete a word back |
 | ⌘[ / ⌘] | Back / forward |
 | ⇧⌘[ / ⇧⌘] | Previous tab / next tab |
 | ⌘W | Close tab, then the window |
@@ -122,6 +123,7 @@ than disappearing:
 |---|---|---|
 | Toggle floating/tiling | Super+T | Ctrl+Alt+T |
 | Toggle workspace layout | Super+L | Ctrl+Alt+L |
+| Toggle window transparency | Super+Backspace | Super+Alt+Backspace |
 | Focus window by direction | Super+arrows | Ctrl+Alt+arrows |
 | Swap window by direction | Super+Shift+arrows | Ctrl+Alt+Shift+arrows |
 
@@ -137,7 +139,9 @@ you can click to mark up; it also lands on the clipboard.
 The ⌘-letter keys do nothing in a terminal. Ctrl+Z suspends a job, Ctrl+D closes
 the shell and Ctrl+A moves to the start of the line, so sending them would be
 worse than doing nothing. ⌘← and ⌘→ still work there, as Home and End, and ⌥←
-and ⌥→ still move by word, because bash reads Ctrl+arrow as a word move. "Terminal" means Omarchy's own `terminal` window tag,
+and ⌥→ still move by word, because bash reads Ctrl+arrow as a word move. ⌘⌫ and
+⌥⌫ send Ctrl+U and Ctrl+W, readline's line and word deletes; Herdr gets these
+too, though Omarchy doesn't tag it as a terminal. "Terminal" means Omarchy's own `terminal` window tag,
 the same one its clipboard bindings use.
 
 ⌘W closes the terminal window, because Ctrl+W there deletes a word. ⌘V pastes
