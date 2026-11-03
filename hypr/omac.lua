@@ -160,9 +160,25 @@ local function send_keys(keys)
   send(1)
 end
 
-local function delete_back(terminal_keys, app_keys)
+-- The omacast launcher takes the keyboard over whatever window is active, and
+-- its search box only edits on Ctrl+U (clear), Ctrl+Backspace (word) and
+-- Backspace. Its layer exists only while it is open.
+local function omacast_open()
+  for _, layer in ipairs(hl.get_layers() or {}) do
+    if layer.namespace == "omacast" then
+      return true
+    end
+  end
+  return false
+end
+
+local function delete_back(terminal_keys, app_keys, omacast_keys)
   return function()
-    send_keys(deletes_like_terminal() and terminal_keys or app_keys)
+    if omacast_open() then
+      send_keys(omacast_keys)
+    else
+      send_keys(deletes_like_terminal() and terminal_keys or app_keys)
+    end
   end
 end
 
@@ -170,8 +186,10 @@ end
 hl.unbind("SUPER + BACKSPACE")
 hl.unbind("SUPER + ALT + BACKSPACE")
 o.bind("SUPER + ALT + BACKSPACE", "Toggle transparency on a window", "omarchy-hyprland-window-transparency-toggle")
-o.bind("SUPER + BACKSPACE", "Delete to line start", delete_back({ { "CTRL", "U" } }, { { "SHIFT", "HOME" }, { "", "BACKSPACE" } }))
-o.bind("ALT + BACKSPACE", "Delete word back", delete_back({ { "CTRL", "W" } }, { { "CTRL", "BACKSPACE" } }))
+o.bind("SUPER + BACKSPACE", "Delete to line start", delete_back(
+  { { "CTRL", "U" } }, { { "SHIFT", "HOME" }, { "", "BACKSPACE" } }, { { "CTRL", "U" } }))
+o.bind("ALT + BACKSPACE", "Delete word back", delete_back(
+  { { "CTRL", "W" } }, { { "CTRL", "BACKSPACE" } }, { { "CTRL", "BACKSPACE" } }))
 
 -- ---------------------------------------------------------------------- ⌘W
 --
