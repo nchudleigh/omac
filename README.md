@@ -141,7 +141,8 @@ the shell and Ctrl+A moves to the start of the line, so sending them would be
 worse than doing nothing. ⌘← and ⌘→ still work there, as Home and End, and ⌥←
 and ⌥→ still move by word, because bash reads Ctrl+arrow as a word move. ⌘⌫ and
 ⌥⌫ send Ctrl+U and Ctrl+W, readline's line and word deletes; Herdr gets these
-too, though Omarchy doesn't tag it as a terminal. "Terminal" means Omarchy's own `terminal` window tag,
+too, though Omarchy doesn't tag it as a terminal. While the omacast launcher is
+open, they send Ctrl+U and Ctrl+Backspace, the edit keys its search box reads. "Terminal" means Omarchy's own `terminal` window tag,
 the same one its clipboard bindings use.
 
 ⌘W closes the terminal window, because Ctrl+W there deletes a word. ⌘V pastes
